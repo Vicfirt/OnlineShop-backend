@@ -3,40 +3,18 @@ package com.javaschool.onlineshop.model.dto;
 
 public class OrderElementDTO {
 
-    private Long id;
-
-    private Long orderId;
-
-    private Double totalPrice;
+    private Long orderItemId;
 
     private ProductDTO product;
 
-    private Integer productCount;
+    private Long quantityInOrder;
 
-    private Double price;
-
-    public Long getId() {
-        return id;
+    public Long getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setOrderItemId(Long orderItemId) {
+        this.orderItemId = orderItemId;
     }
 
     public ProductDTO getProduct() {
@@ -47,19 +25,11 @@ public class OrderElementDTO {
         this.product = product;
     }
 
-    public Integer getProductCount() {
-        return productCount;
+    public Long getQuantityInOrder() {
+        return quantityInOrder;
     }
 
-    public void setProductCount(Integer productCount) {
-        this.productCount = productCount;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setQuantityInOrder(Long quantityInOrder) {
+        this.quantityInOrder = quantityInOrder;
     }
 }

@@ -4,7 +4,7 @@ import com.javaschool.onlineshop.mappers.CustomerMapper;
 import com.javaschool.onlineshop.model.dto.CustomerDTO;
 import com.javaschool.onlineshop.model.entity.Customer;
 import com.javaschool.onlineshop.repository.CustomerRepository;
-import com.javaschool.onlineshop.security.JwtProvider;
+import com.javaschool.onlineshop.security.jwt.JwtProvider;
 import com.javaschool.onlineshop.service.CustomerService;
 
 import org.springframework.security.core.Authentication;

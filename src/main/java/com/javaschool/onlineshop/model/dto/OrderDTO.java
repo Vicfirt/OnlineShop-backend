@@ -2,6 +2,7 @@ package com.javaschool.onlineshop.model.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.criterion.Order;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,10 +38,7 @@ public class OrderDTO {
 
     private String status;
 
-    private CustomerDTO customer;
-
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    private List<ProductDTO> productList;
+    private List<OrderElementDTO> orderElementList;
 
     private LocalDate date;
 
@@ -140,20 +138,12 @@ public class OrderDTO {
         this.status = status;
     }
 
-    public CustomerDTO getCustomer() {
-        return customer;
+    public List<OrderElementDTO> getOrderElementList() {
+        return orderElementList;
     }
 
-    public void setCustomer(CustomerDTO customer) {
-        this.customer = customer;
-    }
-
-    public List<ProductDTO> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<ProductDTO> productList) {
-        this.productList = productList;
+    public void setOrderElementList(List<OrderElementDTO> orderElementList) {
+        this.orderElementList = orderElementList;
     }
 
     public LocalDate getDate() {

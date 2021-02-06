@@ -1,68 +1,42 @@
-package com.javaschool.onlineshop.model.entity;
+package com.javaschool.onlineshop.model.dto;
 
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-@Entity
-@Table(name = "order_info")
-public class Order {
+public class OrderObjectDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(name = "order_total")
     private Double total;
 
-    @Column(name = "customer_country")
     private String country;
 
-    @Column(name = "customer_city")
     private String city;
 
-    @Column(name = "postcode")
     private Integer postcode;
 
-    @Column(name = "customer_street")
     private String street;
 
-    @Column(name = "customer_building")
     private String building;
 
-    @Column(name = "customer_room")
     private String room;
 
-    @Column(name = "customer_email")
     private String customerEmail;
 
-    @Column(name = "first_name")
     private String customerFirstName;
 
-    @Column(name = "last_name")
     private String customerLastName;
 
-    @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "shipping_type")
     private String shippingType;
 
-    @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<OrderElement> orderElementList;
+   private Map<Long, Long> productInformation;
 
-    @Column(name ="order_date")
     private LocalDate date;
-
-    public Order(){
-        this.date = LocalDate.now();
-        this.orderElementList = new ArrayList<>();
-    }
 
     public Long getOrderId() {
         return orderId;
@@ -136,6 +110,22 @@ public class Order {
         this.customerEmail = customerEmail;
     }
 
+    public String getCustomerFirstName() {
+        return customerFirstName;
+    }
+
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
+
     public String getPaymentMethod() {
         return paymentMethod;
     }
@@ -160,12 +150,12 @@ public class Order {
         this.status = status;
     }
 
-    public List<OrderElement> getOrderElementList() {
-        return orderElementList;
+    public Map<Long, Long> getProductInformation() {
+        return productInformation;
     }
 
-    public void setOrderElementList(List<OrderElement> orderElementList) {
-        this.orderElementList = orderElementList;
+    public void setProductInformation(Map<Long, Long> productInformation) {
+        this.productInformation = productInformation;
     }
 
     public LocalDate getDate() {
@@ -174,21 +164,5 @@ public class Order {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public String getCustomerFirstName() {
-        return customerFirstName;
-    }
-
-    public void setCustomerFirstName(String customerFirstName) {
-        this.customerFirstName = customerFirstName;
-    }
-
-    public String getCustomerLastName() {
-        return customerLastName;
-    }
-
-    public void setCustomerLastName(String customerLastName) {
-        this.customerLastName = customerLastName;
     }
 }
