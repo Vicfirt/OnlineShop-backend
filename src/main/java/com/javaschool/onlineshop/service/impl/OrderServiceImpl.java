@@ -2,9 +2,7 @@ package com.javaschool.onlineshop.service.impl;
 
 import com.javaschool.onlineshop.mappers.OrderMapper;
 import com.javaschool.onlineshop.model.dto.OrderDTO;
-import com.javaschool.onlineshop.model.dto.OrderElementDTO;
 import com.javaschool.onlineshop.model.dto.OrderObjectDTO;
-import com.javaschool.onlineshop.model.dto.ProductDTO;
 import com.javaschool.onlineshop.model.entity.Order;
 import com.javaschool.onlineshop.model.entity.OrderElement;
 import com.javaschool.onlineshop.model.entity.Product;
@@ -40,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO addOrder(OrderObjectDTO orderObjectDTO) {
         Order order = new Order();
         List<OrderElement> orderElementList = new ArrayList<>();
-        for(Map.Entry<Long, Long> entry : orderObjectDTO.getProductInformation().entrySet()) {
+        for (Map.Entry<Long, Long> entry : orderObjectDTO.getProductInformation().entrySet()) {
             Product product = productRepository.findById(entry.getKey()).get();
             OrderElement orderElement = new OrderElement();
             orderElement.setProduct(product);
@@ -51,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         order.getOrderElementList().addAll(orderElementList);
         order.setCustomerFirstName(orderObjectDTO.getCustomerFirstName());
         order.setCustomerLastName(orderObjectDTO.getCustomerLastName());
-        order.setCustomerEmail(orderObjectDTO.getCustomerEmail());
+        order.setCustomerEmailAddress(orderObjectDTO.getCustomerEmailAddress());
         order.setCountry(orderObjectDTO.getCountry());
         order.setCity(orderObjectDTO.getCity());
         order.setStreet(orderObjectDTO.getStreet());
@@ -66,16 +64,41 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderToOrderDTO(order);
     }
 
-    public List<Order> findAll(){
+    @Override
+    public List<OrderDTO> findAllOrders() {
         List<Order> orderList = orderRepository.findAll();
-        return orderList;
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+        orderList.forEach(order -> orderDTOList.add(orderMapper.orderToOrderDTO(order)));
+        return orderDTOList;
     }
 
     @Override
     public List<OrderDTO> findOrdersByEmail(String customerEmail) {
-        List<Order> orderList = orderRepository.findOrdersByCustomerEmail(customerEmail);
+        List<Order> orderList = orderRepository.findOrdersByCustomerEmailAddress(customerEmail);
         List<OrderDTO> orderDTOList = new ArrayList<>();
         orderList.forEach(order -> orderDTOList.add(orderMapper.orderToOrderDTO(order)));
+        return orderDTOList;
+    }
+
+    @Override
+    public OrderDTO findOrderById(Long orderId) {
+        Order order = orderRepository.getOne(orderId);
+        return orderMapper.orderToOrderDTO(order);
+    }
+
+    @Override
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
+    }
+
+    @Override
+    public List<OrderDTO> updateOrder(Long orderId, String orderStatus) {
+        Order order = orderRepository.getOne(orderId);
+        order.setStatus(orderStatus);
+        orderRepository.save(order);
+        List<Order> orderList = orderRepository.findAll();
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+        orderList.forEach(orderInList -> orderDTOList.add(orderMapper.orderToOrderDTO(orderInList)));
         return orderDTOList;
     }
 }

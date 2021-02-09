@@ -1,6 +1,7 @@
 package com.javaschool.onlineshop.model.dto;
 
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -10,22 +11,31 @@ public class OrderObjectDTO {
 
     private Double total;
 
+    @Size(min = 2, max = 40, message = "The number of letters in the country name must be between 2 and 20")
     private String country;
 
+    @Size(min = 2, max = 20, message = "The number of letters in the city name must be between 2 and 20")
     private String city;
 
+    @Min(value = 1, message = "Postcode should be more than 1")
     private Integer postcode;
 
+    @Size(min = 2, max = 40, message = "The number of letters in the street name must be between 2 and 40")
     private String street;
 
+    @Size(min = 1, max = 10000)
     private String building;
 
+    @Size(min = 1, max = 10000)
     private String room;
 
-    private String customerEmail;
+    @Email
+    private String customerEmailAddress;
 
+    @Size(min = 2, max = 16, message = "First name must contain 2 to 16 characters.")
     private String customerFirstName;
 
+    @Size(min = 2, max = 16, message = "Last name must contain 2 to 16 characters.")
     private String customerLastName;
 
     private String paymentMethod;
@@ -102,12 +112,12 @@ public class OrderObjectDTO {
         this.room = room;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerEmailAddress() {
+        return customerEmailAddress;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerEmailAddress(String customerEmailAddress) {
+        this.customerEmailAddress = customerEmailAddress;
     }
 
     public String getCustomerFirstName() {

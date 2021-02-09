@@ -2,8 +2,9 @@ package com.javaschool.onlineshop.model.dto;
 
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 public class CustomerDTO {
 
@@ -15,8 +16,8 @@ public class CustomerDTO {
     @Size(min = 2, max = 16, message = "Last name must contain 2 to 16 characters.")
     private String customerLastName;
 
-    @NotEmpty
-    private String customerDateOfBirth;
+    @PastOrPresent
+    private LocalDate customerDateOfBirth;
 
     @Email(message = "Please, enter correct email address.")
     private String customerEmailAddress;
@@ -30,6 +31,25 @@ public class CustomerDTO {
 
     @Size(min = 7, max = 11, message = "Your phone number myst contain 7 to 11 numbers.")
     private String phoneNumber;
+
+    @Size(min = 2, max = 40, message = "The number of letters in the country name must be between 2 and 20")
+    private String country;
+
+    @Size(min = 2, max = 20, message = "The number of letters in the city name must be between 2 and 20")
+    private String city;
+
+    @Size(min = 4, max = 10, message = "The number of characters in the postcode must be be from 4 to 10")
+    private String postcode;
+
+    @Size(min = 2, max = 40, message = "The number of letters in the street name must be between 2 and 40")
+    private String street;
+
+    @Size(min = 1, max = 10000)
+    private String building;
+
+    @Size(min = 1, max = 10000)
+    private String room;
+
 
     public Long getCustomerId() {
         return customerId;
@@ -55,11 +75,11 @@ public class CustomerDTO {
         this.customerLastName = customerLastName;
     }
 
-    public String getCustomerDateOfBirth() {
+    public LocalDate getCustomerDateOfBirth() {
         return customerDateOfBirth;
     }
 
-    public void setCustomerDateOfBirth(String customerDateOfBirth) {
+    public void setCustomerDateOfBirth(LocalDate customerDateOfBirth) {
         this.customerDateOfBirth = customerDateOfBirth;
     }
 
@@ -101,5 +121,53 @@ public class CustomerDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

@@ -10,4 +10,12 @@ public interface OrderService {
     OrderDTO addOrder(OrderObjectDTO orderObjectDTO);
 
     List<OrderDTO> findOrdersByEmail(String customerEmail);
+
+    OrderDTO findOrderById(Long orderId);
+
+    void deleteOrder(Long orderId);
+
+    List<OrderDTO> updateOrder(Long orderId, String orderStatus);
+
+    List<OrderDTO> findAllOrders();
 }

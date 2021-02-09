@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductsInCart(List<Long> productIdList){
+    public List<ProductDTO> getProductsInCart(List<Long> productIdList) {
         List<Product> productList = productRepository.findByProductIdIn(productIdList);
         List<ProductDTO> productDTOList = new ArrayList<>();
         productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));

@@ -1,11 +1,9 @@
 package com.javaschool.onlineshop.model.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.criterion.Order;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDTO {
@@ -14,22 +12,31 @@ public class OrderDTO {
 
     private Double total;
 
+    @Size(min = 2, max = 40, message = "The number of letters in the country name must be between 2 and 20")
     private String country;
 
+    @Size(min = 2, max = 20, message = "The number of letters in the city name must be between 2 and 20")
     private String city;
 
+    @Size(min = 4, max = 10, message = "The number of characters in the postcode must be be from 4 to 10")
     private Integer postcode;
 
+    @Size(min = 2, max = 40, message = "The number of letters in the street name must be between 2 and 40")
     private String street;
 
+    @Size(min = 1, max = 10000)
     private String building;
 
+    @Size(min = 1, max = 10000)
     private String room;
 
-    private String customerEmail;
+    @Email
+    private String customerEmailAddress;
 
+    @Size(min = 2, max = 16, message = "First name must contain 2 to 16 characters.")
     private String customerFirstName;
 
+    @Size(min = 2, max = 16, message = "Last name must contain 2 to 16 characters.")
     private String customerLastName;
 
     private String paymentMethod;
@@ -106,12 +113,12 @@ public class OrderDTO {
         this.room = room;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerEmailAddress() {
+        return customerEmailAddress;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerEmailAddress(String customerEmailAddress) {
+        this.customerEmailAddress = customerEmailAddress;
     }
 
     public String getPaymentMethod() {

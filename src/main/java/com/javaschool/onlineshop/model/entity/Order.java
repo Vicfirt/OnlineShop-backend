@@ -1,7 +1,14 @@
 package com.javaschool.onlineshop.model.entity;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GenerationType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +43,7 @@ public class Order {
     private String room;
 
     @Column(name = "customer_email")
-    private String customerEmail;
+    private String customerEmailAddress;
 
     @Column(name = "first_name")
     private String customerFirstName;
@@ -128,12 +135,12 @@ public class Order {
         this.room = room;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getCustomerEmailAddress() {
+        return customerEmailAddress;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCustomerEmailAddress(String customerEmailAddress) {
+        this.customerEmailAddress = customerEmailAddress;
     }
 
     public String getPaymentMethod() {

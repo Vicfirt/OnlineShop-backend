@@ -7,12 +7,9 @@ import com.javaschool.onlineshop.repository.CustomerRepository;
 import com.javaschool.onlineshop.security.jwt.JwtProvider;
 import com.javaschool.onlineshop.service.CustomerService;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,13 +39,13 @@ public class CustomerServiceImpl implements CustomerService {
         response.put("email", email);
         response.put("token", token);
         response.put("role", role);
+        response.put("customer", customerMapper.customerToCustomerDTO(customer));
         return response;
     }
 
     @Override
-    public CustomerDTO getCustomer() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Customer customer = customerRepository.findCustomerByCustomerEmailAddress(authentication.getName());
+    public CustomerDTO getCustomer(String username) {
+        Customer customer = customerRepository.findCustomerByCustomerEmailAddress(username);
         return customerMapper.customerToCustomerDTO(customer);
     }
 
@@ -66,12 +63,27 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customerDTO, Principal principal) {
-
+    public void updateCustomer(String customerName, CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findCustomerByCustomerEmailAddress(customerName);
+        customer.setActive(customerDTO.getActive());
+        customer.setCustomerPassword(passwordEncoder.encode(customerDTO.getCustomerPassword()));
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setCustomerDateOfBirth(customerDTO.getCustomerDateOfBirth());
+        customer.setCustomerLastName(customerDTO.getCustomerLastName());
+        customer.setCustomerFirstName(customerDTO.getCustomerFirstName());
+        customer.setBuilding(customerDTO.getBuilding());
+        customer.setRoom(customerDTO.getRoom());
+        customer.setRole(customerDTO.getRole());
+        customer.setCountry(customerDTO.getCountry());
+        customer.setCity(customerDTO.getCity());
+        customer.setStreet(customerDTO.getStreet());
+        customer.setPostcode(customerDTO.getPostcode());
+        customerRepository.save(customer);
     }
 
     @Override
     public CustomerDTO getById(Long id) {
-        return null;
+        Customer customer = customerRepository.getOne(id);
+        return customerMapper.customerToCustomerDTO(customer);
     }
 }
