@@ -15,8 +15,8 @@ public class CustomExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    @ExceptionHandler(FieldInputError.class)
-    public ResponseEntity<Map<String, String>> handleValidationError(FieldInputError exception){
+    @ExceptionHandler(FieldInputException.class)
+    public ResponseEntity<Map<String, String>> handleValidationError(FieldInputException exception){
         LOGGER.error(exception.getMessage(), exception);
         return ResponseEntity.badRequest().body(exception.getErrorsMap());
 

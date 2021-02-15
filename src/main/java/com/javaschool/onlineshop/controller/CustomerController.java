@@ -1,14 +1,19 @@
 package com.javaschool.onlineshop.controller;
 
 import com.javaschool.onlineshop.exception.EmailExistsException;
-import com.javaschool.onlineshop.exception.FieldInputError;
+import com.javaschool.onlineshop.exception.FieldInputException;
 import com.javaschool.onlineshop.model.dto.CustomerDTO;
 import com.javaschool.onlineshop.security.CustomUserPrincipal;
 import com.javaschool.onlineshop.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.validation.Valid;
 
@@ -30,7 +35,7 @@ public class CustomerController {
             throw new EmailExistsException("Email with email: " + customerExists.getCustomerEmailAddress() + " already exists!");
         }
         if (bindingResult.hasErrors()) {
-            throw new FieldInputError(bindingResult, "Validation error!");
+            throw new FieldInputException(bindingResult, "Validation error!");
         }
         customerService.addCustomer(customerDTO);
         return ResponseEntity.ok("User has been registered!");
@@ -46,7 +51,7 @@ public class CustomerController {
                                                @Valid @RequestBody CustomerDTO updatedCustomer,
                                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new FieldInputError(bindingResult, "Validation error!");
+            throw new FieldInputException(bindingResult, "Validation error!");
         }
         customerService.updateCustomer(customer.getUsername(), updatedCustomer);
         return ResponseEntity.ok("User has been updated!");

@@ -50,10 +50,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
-        .authorizeRequests().antMatchers("/", "/home", "/catalog/**").permitAll()
+        .authorizeRequests().antMatchers("/", "/home", "/product/active").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/cart").permitAll()
                 .antMatchers("/order").permitAll()
+                .antMatchers("/product/test").permitAll()
+                .antMatchers("/product/all").hasAnyAuthority("ADMIN")
+                .antMatchers("/product/{productId}", "/product/categories").permitAll()
+                .antMatchers("/product/add").hasAnyAuthority("ADMIN")
+                .antMatchers("/media/**").permitAll()
                 .antMatchers("/authentication/login").permitAll().anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,6 +1,6 @@
 package com.javaschool.onlineshop.controller;
 
-import com.javaschool.onlineshop.exception.FieldInputError;
+import com.javaschool.onlineshop.exception.FieldInputException;
 import com.javaschool.onlineshop.model.dto.OrderDTO;
 import com.javaschool.onlineshop.model.dto.OrderObjectDTO;
 import com.javaschool.onlineshop.security.CustomUserPrincipal;
@@ -8,7 +8,14 @@ import com.javaschool.onlineshop.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,7 +33,7 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderObjectDTO orderObjectDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new FieldInputError(bindingResult, "Validation error");
+            throw new FieldInputException(bindingResult, "Validation error");
         } else {
             return ResponseEntity.ok(orderService.addOrder(orderObjectDTO));
         }

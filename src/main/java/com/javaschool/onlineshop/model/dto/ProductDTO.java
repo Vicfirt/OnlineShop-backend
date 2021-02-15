@@ -1,47 +1,57 @@
 package com.javaschool.onlineshop.model.dto;
 
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 
 public class ProductDTO {
 
     private Long productId;
 
+    @NotBlank(message = "Field should not be empty!")
     @Size(min = 2, max = 40, message = "Product name must contain 2 to 40 characters.")
     private String productName;
 
+    @NotNull(message = "Field should not be empty!")
     @Min(value = 1, message = "The price cannot be less than 1")
     @Max(value = 1000000, message = "The price should not exceed 1000000")
     private Double productPrice;
 
-    private Integer categoryId;
+    @NotNull(message = "Field should not be empty!")
+    private String category;
 
     @Size(min = 2, max = 25, message = "Brand name must contain 2 to 25 characters.")
+    @NotBlank(message = "Field should not be empty!")
     private String productBrand;
 
     @Size( max = 30, message = "Model name must contain 2 to 30 characters.")
+    @NotBlank(message = "Field should not be empty!")
     private String productModel;
 
+    @NotNull(message = "Field should not be empty!")
     @Min(value = 1, message = "Weight cannot be less than 1")
     @Max(value = 100000, message = "Weight should not exceed 1000000" )
     private Integer productWeight;
 
+    @NotNull(message = "Field should not be empty!")
     @Min(value = 0, message = "Capacity cannot be less than 0")
     @Max(value = 2000, message = "Capacity should not exceed 2000")
     private Integer productCapacity;
 
+    @NotNull(message = "Field should not be empty!")
     @Min(value = 1, message = "Amount in stock cannot be less than 1")
     @Max(value = 10000, message = "Amount in stock should not exceed 1000000")
     private Integer amountInStock;
 
     @Size( max = 255, message = "The number of characters in the description cannot be more than 255")
+    @NotBlank(message = "Field should not be empty!")
     private String productDescription;
 
+    @NotNull
     private Boolean isActive;
 
-    @Size( max = 255, message = "The number of characters in the product image URL cannot be more than 255")
     private String productImage;
 
     public Long getProductId() {
@@ -68,12 +78,12 @@ public class ProductDTO {
         this.productPrice = productPrice;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getProductBrand() {

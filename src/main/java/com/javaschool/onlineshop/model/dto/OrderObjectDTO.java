@@ -1,7 +1,8 @@
 package com.javaschool.onlineshop.model.dto;
 
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.Map;
 

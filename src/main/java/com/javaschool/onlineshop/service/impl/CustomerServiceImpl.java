@@ -39,7 +39,6 @@ public class CustomerServiceImpl implements CustomerService {
         response.put("email", email);
         response.put("token", token);
         response.put("role", role);
-        response.put("customer", customerMapper.customerToCustomerDTO(customer));
         return response;
     }
 
