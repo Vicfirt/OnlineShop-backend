@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/product")
 public class ProductController {
 
@@ -35,13 +35,12 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping(value = "/add", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/new", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addProduct(@RequestPart(name = "imgFile", required = false) MultipartFile file,
-            @ModelAttribute @Valid ProductDTO productDTO, BindingResult bindingResult) {
+                                             @ModelAttribute @Valid ProductDTO productDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new FieldInputException(bindingResult, "Validation error");
-        }
-        else {
+        } else {
             productService.addProduct(productDTO, file);
             return ResponseEntity.ok("Product has been added successfully");
         }
@@ -52,19 +51,18 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(productId));
     }
 
-    @PutMapping(value = "/edit", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/edition", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateProduct(@RequestPart(name = "imgFile", required = false) MultipartFile file,
-                                             @ModelAttribute @Valid ProductDTO productDTO, BindingResult bindingResult) {
+                                                @ModelAttribute @Valid ProductDTO productDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new FieldInputException(bindingResult, "Validation error");
-        }
-        else {
+        } else {
             productService.addProduct(productDTO, file);
             return ResponseEntity.ok("Product has been updated successfully");
         }
     }
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/deletion/{productId}")
     public ResponseEntity<List<ProductDTO>> deleteProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(productService.deleteProduct(productId));
     }
@@ -77,7 +75,7 @@ public class ProductController {
 
     @PostMapping("/category")
     public ResponseEntity<List<CategoryDTO>> addNewCategory(@Valid @RequestBody CategoryDTO categoryDTO,
-                                                            BindingResult bindingResult){
+                                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new FieldInputException(bindingResult, "Validation error");
         } else {
@@ -86,7 +84,7 @@ public class ProductController {
     }
 
     @GetMapping("/brands")
-    public ResponseEntity<List<String>> getBrands(){
+    public ResponseEntity<List<String>> getBrands() {
         return ResponseEntity.ok(productService.getAllAvailableBrands());
     }
 

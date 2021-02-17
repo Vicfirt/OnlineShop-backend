@@ -18,4 +18,6 @@ public interface OrderService {
     List<OrderDTO> updateOrder(Long orderId, String orderStatus);
 
     List<OrderDTO> findAllOrders();
+
+    List<Object> findSalesSumInEachCategory();
 }

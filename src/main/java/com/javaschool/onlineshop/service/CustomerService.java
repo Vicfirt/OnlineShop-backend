@@ -8,13 +8,9 @@ public interface CustomerService {
 
     Map<String, Object> login(String email);
 
-    CustomerDTO getCustomer(String username);
-
     CustomerDTO addCustomer(CustomerDTO customerDTO);
 
     CustomerDTO getByUsername(String username);
 
     void updateCustomer(String customerName,CustomerDTO customerDTO);
-
-    CustomerDTO getById(Long id);
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
@@ -44,19 +43,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findOrdersByEmail(customer.getUsername()));
     }
 
-    @GetMapping("/order/{orderId}")
-    public ResponseEntity<OrderDTO> getOrderById(@AuthenticationPrincipal CustomUserPrincipal customer,
-                                                 @PathVariable Long orderId) {
+    @GetMapping("/order/info/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.findOrderById(orderId));
     }
 
-    @DeleteMapping("/order/{orderId}")
-    public ResponseEntity<String> deleteOrder(@PathVariable Long orderId) {
-        orderService.deleteOrder(orderId);
-        return ResponseEntity.ok("Order has been deleted");
-    }
-
-    @PatchMapping("/order/{orderId}")
+    @PatchMapping("/order/status/{orderId}")
     public ResponseEntity<List<OrderDTO>> updateOrder(@PathVariable Long orderId, @RequestBody String orderStatus) {
         return ResponseEntity.ok(orderService.updateOrder(orderId, orderStatus));
     }
@@ -64,5 +56,10 @@ public class OrderController {
     @GetMapping("/orders/all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.findAllOrders());
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<Object>> getStat() {
+        return ResponseEntity.ok(orderService.findSalesSumInEachCategory());
     }
 }

@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
+            productRepository.deleteById(productId);
         List<Product> productList = productRepository.findByIsActiveTrue();
         List<ProductDTO> productDTOList = new ArrayList<>();
         productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));

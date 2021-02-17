@@ -35,17 +35,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findCustomerByCustomerEmailAddress(email);
         String role = customer.getRole();
         String token = jwtProvider.createToken(email, role);
-        Map<String, Object> response = new HashMap<>();
-        response.put("email", email);
-        response.put("token", token);
-        response.put("role", role);
-        return response;
-    }
-
-    @Override
-    public CustomerDTO getCustomer(String username) {
-        Customer customer = customerRepository.findCustomerByCustomerEmailAddress(username);
-        return customerMapper.customerToCustomerDTO(customer);
+        Map<String, Object> jwtResponse = new HashMap<>();
+        jwtResponse.put("email", email);
+        jwtResponse.put("token", token);
+        jwtResponse.put("role", role);
+        return jwtResponse;
     }
 
     @Override
@@ -78,11 +72,5 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setStreet(customerDTO.getStreet());
         customer.setPostcode(customerDTO.getPostcode());
         customerRepository.save(customer);
-    }
-
-    @Override
-    public CustomerDTO getById(Long id) {
-        Customer customer = customerRepository.getOne(id);
-        return customerMapper.customerToCustomerDTO(customer);
     }
 }

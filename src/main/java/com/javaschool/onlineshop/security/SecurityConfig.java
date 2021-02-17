@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -28,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    @Bean(name = "passwordEncoder")
-    public BCryptPasswordEncoder passwordEncoder() {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -50,14 +51,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
-        .authorizeRequests().antMatchers("/", "/home", "/product/active").permitAll()
+        .authorizeRequests().antMatchers( "/cart", "/product/active").permitAll()
                 .antMatchers("/signup").permitAll()
-                .antMatchers("/cart").permitAll()
+                .antMatchers("/statistics").hasAnyAuthority("ADMIN")
                 .antMatchers("/order").permitAll()
-                .antMatchers("/product/test").permitAll()
-                .antMatchers("/product/all").hasAnyAuthority("ADMIN")
+                .antMatchers("/order/info").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers("/order/status").hasAnyAuthority("ADMIN")
+                .antMatchers("/product/all", "/orders/all").hasAnyAuthority("ADMIN")
+                .antMatchers("/product/deletion", "/product/edition").hasAnyAuthority("ADMIN")
                 .antMatchers("/product/{productId}", "/product/categories").permitAll()
-                .antMatchers("/product/add").hasAnyAuthority("ADMIN")
+                .antMatchers("/product/new", "product/category").hasAnyAuthority("ADMIN")
                 .antMatchers("/media/**").permitAll()
                 .antMatchers("/authentication/login").permitAll().anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
