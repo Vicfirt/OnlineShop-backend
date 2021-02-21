@@ -37,16 +37,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO addOrder(OrderObjectDTO orderObjectDTO) {
-        Order order = new Order();
         List<OrderElement> orderElementList = new ArrayList<>();
         for (Map.Entry<Long, Long> entry : orderObjectDTO.getProductInformation().entrySet()) {
             Product product = productRepository.findById(entry.getKey()).get();
             OrderElement orderElement = new OrderElement();
             orderElement.setProduct(product);
             orderElement.setQuantityInOrder(entry.getValue());
+            orderElement.setElementPrice(product.getProductPrice() * entry.getValue());
             orderElementList.add(orderElement);
             orderElementRepository.save(orderElement);
         }
+        Order order = createOrder(orderElementList, orderObjectDTO);
+        orderRepository.save(order);
+        return orderMapper.orderToOrderDTO(order);
+    }
+
+    private Order createOrder(List<OrderElement> orderElementList, OrderObjectDTO orderObjectDTO) {
+        Order order = new Order();
         order.getOrderElementList().addAll(orderElementList);
         order.setCustomerFirstName(orderObjectDTO.getCustomerFirstName());
         order.setCustomerLastName(orderObjectDTO.getCustomerLastName());
@@ -61,8 +68,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(orderObjectDTO.getStatus());
         order.setTotal(orderObjectDTO.getTotal());
         order.setPostcode(orderObjectDTO.getPostcode());
-        orderRepository.save(order);
-        return orderMapper.orderToOrderDTO(order);
+        return order;
     }
 
     @Override

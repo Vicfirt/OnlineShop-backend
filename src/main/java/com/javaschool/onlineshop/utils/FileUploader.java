@@ -15,22 +15,19 @@ import java.util.UUID;
 @Component
 public class FileUploader {
 
-    private static String PATH;
-
     @Value("${upload.path}")
-    public void setPATH(String PATH) {
-        FileUploader.PATH = PATH;
-    }
+    private String path;
 
     /**
      * This method tries to transfer created image in specified directory.
-     * @param multipartFile             file received from the form
+     *
+     * @param multipartFile file received from the form
      */
-    public static String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile) {
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + "." + multipartFile.getOriginalFilename();
         try {
-            multipartFile.transferTo(new File(PATH + "/" + fileName));
+            multipartFile.transferTo(new File(path + "/" + fileName));
             return fileName;
         } catch (IOException e) {
             throw new FileTransferException("Error during file transfer. File name: " + fileName);

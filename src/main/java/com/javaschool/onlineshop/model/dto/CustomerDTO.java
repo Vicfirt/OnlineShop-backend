@@ -50,7 +50,6 @@ public class CustomerDTO {
     @Size(min = 1, max = 10000)
     private String room;
 
-
     public Long getCustomerId() {
         return customerId;
     }

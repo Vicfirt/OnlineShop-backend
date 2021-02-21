@@ -2,7 +2,6 @@ package com.javaschool.onlineshop.security;
 
 import com.javaschool.onlineshop.security.jwt.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,12 +16,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("com.javaschool.onlineshop")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-   private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-   private final JwtRequestFilter jwtRequestFilter;
+    private final JwtRequestFilter jwtRequestFilter;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.userDetailsService = userDetailsService;
@@ -51,10 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
-        .authorizeRequests().antMatchers( "/cart", "/product/active").permitAll()
+                .authorizeRequests().antMatchers("/cart", "/product/active").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/statistics").hasAnyAuthority("ADMIN")
                 .antMatchers("/order").permitAll()
+                .antMatchers("/advertisement").permitAll()
                 .antMatchers("/order/info").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers("/order/status").hasAnyAuthority("ADMIN")
                 .antMatchers("/product/all", "/orders/all").hasAnyAuthority("ADMIN")

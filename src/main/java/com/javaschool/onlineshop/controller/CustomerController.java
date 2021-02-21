@@ -18,19 +18,25 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.validation.Valid;
 
+/**
+ * This class handles requests related to registration and editing a profile
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class CustomerController {
 
     private final CustomerService customerService;
 
-    OrderRepository orderRepository;
-
-    public CustomerController(CustomerService customerService, OrderRepository orderRepository) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.orderRepository = orderRepository;
     }
 
+    /**
+     * This method processes the request for registration of a new user.
+     * @param customerDTO            customer to be registered
+     * @param bindingResult          used for form validation
+     * @return                       response informing about successful registration
+     */
     @PostMapping("/signup")
     public ResponseEntity<String> toSignUp(@Valid @RequestBody CustomerDTO customerDTO,
                                            BindingResult bindingResult) {
@@ -45,11 +51,23 @@ public class CustomerController {
         return ResponseEntity.ok("User has been registered!");
     }
 
+    /**
+     * This method processes a request for information about a previously registered customer.
+     * @param customer              customer to be authenticated
+     * @return                      response with information about authenticated customer
+     */
     @GetMapping("/customer")
     public ResponseEntity<CustomerDTO> getCustomer(@AuthenticationPrincipal CustomUserPrincipal customer) {
         return ResponseEntity.ok(customerService.getByUsername(customer.getUsername()));
     }
 
+    /**
+     * This method processes a request to update customer information.
+     * @param customer              customer to be authenticated
+     * @param updatedCustomer       it contains data necessary for updating customer
+     * @param bindingResult         used for form validation
+     * @return
+     */
     @PutMapping("/customer")
     public ResponseEntity<String> editCustomer(@AuthenticationPrincipal CustomUserPrincipal customer,
                                                @Valid @RequestBody CustomerDTO updatedCustomer,

@@ -4,9 +4,9 @@ import java.util.List;
 
 public class FilterParametersDTO {
 
-    List<String> brandsToFilter;
+    private List<String> brandsToFilter;
 
-    List<String> categoriesToFilter;
+    private List<String> categoriesToFilter;
 
     public List<String> getBrandsToFilter() {
         return brandsToFilter;

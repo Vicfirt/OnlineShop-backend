@@ -1,6 +1,5 @@
 package com.javaschool.onlineshop.model.dto;
 
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;

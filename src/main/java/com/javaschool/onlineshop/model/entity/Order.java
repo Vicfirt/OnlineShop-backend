@@ -1,6 +1,5 @@
 package com.javaschool.onlineshop.model.entity;
 
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
@@ -63,10 +62,10 @@ public class Order {
     @OneToMany(fetch = FetchType.EAGER)
     private List<OrderElement> orderElementList;
 
-    @Column(name ="order_date")
+    @Column(name = "order_date")
     private LocalDate date;
 
-    public Order(){
+    public Order() {
         this.date = LocalDate.now();
         this.orderElementList = new ArrayList<>();
     }

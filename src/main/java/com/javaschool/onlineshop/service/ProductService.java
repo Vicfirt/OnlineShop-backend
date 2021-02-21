@@ -20,8 +20,6 @@ public interface ProductService {
 
     List<ProductDTO> findAllActiveProducts();
 
-    Set<String> getBrandNames(List<ProductDTO> products);
-
     List<String> getAllAvailableBrands();
 
     List<ProductDTO> getProductsInCart(List<Long> productIdList);

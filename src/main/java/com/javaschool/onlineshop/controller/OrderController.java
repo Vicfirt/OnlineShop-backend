@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * This class handles requests related to actions with orders.
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class OrderController {

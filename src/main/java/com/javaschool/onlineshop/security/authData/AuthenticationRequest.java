@@ -1,17 +1,17 @@
-package com.javaschool.onlineshop.model.dto;
+package com.javaschool.onlineshop.security.authData;
 
-public class AuthenticationRequestDTO {
+public class AuthenticationRequest {
 
     private String username;
 
     private String password;
 
-    public AuthenticationRequestDTO(String username, String password) {
+    public AuthenticationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public AuthenticationRequestDTO() {
+    public AuthenticationRequest() {
     }
 
     public String getUsername() {

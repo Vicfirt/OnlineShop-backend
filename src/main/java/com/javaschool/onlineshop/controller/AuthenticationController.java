@@ -1,7 +1,8 @@
 package com.javaschool.onlineshop.controller;
 
 import com.javaschool.onlineshop.exception.LoginRequestException;
-import com.javaschool.onlineshop.model.dto.AuthenticationRequestDTO;
+import com.javaschool.onlineshop.security.authData.AuthenticationRequest;
+import com.javaschool.onlineshop.security.authData.JwtResponse;
 import com.javaschool.onlineshop.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
-import java.util.Map;
-
+/**
+ * This class is responsible for handling the authentication request.
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/authentication")
@@ -31,8 +32,13 @@ public class AuthenticationController {
         this.customerService = customerService;
     }
 
+    /**
+     * This method is responsible for handling request to user authentication
+     * @param request           it contains information required for authentication
+     * @return                  contains email, password, token of authenticated user
+     */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody AuthenticationRequestDTO request) {
+    public ResponseEntity<JwtResponse> login(@RequestBody AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             return ResponseEntity.ok(customerService.login(request.getUsername()));

@@ -2,6 +2,7 @@ package com.javaschool.onlineshop.service.impl;
 
 import com.javaschool.onlineshop.mappers.CustomerMapper;
 import com.javaschool.onlineshop.model.dto.CustomerDTO;
+import com.javaschool.onlineshop.security.authData.JwtResponse;
 import com.javaschool.onlineshop.model.entity.Customer;
 import com.javaschool.onlineshop.repository.CustomerRepository;
 import com.javaschool.onlineshop.security.jwt.JwtProvider;
@@ -9,9 +10,6 @@ import com.javaschool.onlineshop.service.CustomerService;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -24,21 +22,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final JwtProvider jwtProvider;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,
+                               PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
     }
 
-    public Map<String, Object> login(String email) {
+    public JwtResponse login(String email) {
         Customer customer = customerRepository.findCustomerByCustomerEmailAddress(email);
         String role = customer.getRole();
         String token = jwtProvider.createToken(email, role);
-        Map<String, Object> jwtResponse = new HashMap<>();
-        jwtResponse.put("email", email);
-        jwtResponse.put("token", token);
-        jwtResponse.put("role", role);
+        JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setEmail(email);
+        jwtResponse.setToken(token);
+        jwtResponse.setRole(role);
         return jwtResponse;
     }
 

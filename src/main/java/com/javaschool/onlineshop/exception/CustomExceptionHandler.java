@@ -19,7 +19,6 @@ public class CustomExceptionHandler {
     public ResponseEntity<Map<String, String>> handleValidationError(FieldInputException exception) {
         LOGGER.error(exception.getMessage(), exception);
         return ResponseEntity.badRequest().body(exception.getErrorsMap());
-
     }
 
     @ExceptionHandler(EmailExistsException.class)
@@ -33,4 +32,11 @@ public class CustomExceptionHandler {
         LOGGER.error(exception.getMessage(), exception);
         return ResponseEntity.status(exception.getStatus()).body(exception.getMessage());
     }
+
+    @ExceptionHandler(FileTransferException.class)
+    public ResponseEntity<FileTransferException> handleFileTransportException(FileTransferException exception) {
+        LOGGER.error(exception.getMessage(), exception);
+        return ResponseEntity.badRequest().body(exception);
+    }
+
 }

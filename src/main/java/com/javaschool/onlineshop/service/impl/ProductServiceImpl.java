@@ -30,11 +30,18 @@ public class ProductServiceImpl implements ProductService {
 
     private final CategoryMapper categoryMapper;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    private final FileUploader fileUploader;
+
+    public ProductServiceImpl(ProductRepository productRepository,
+                              ProductMapper productMapper,
+                              CategoryRepository categoryRepository,
+                              CategoryMapper categoryMapper,
+                              FileUploader fileUploader) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
+        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -55,14 +62,13 @@ public class ProductServiceImpl implements ProductService {
     public void addProduct(ProductDTO productDTO, MultipartFile file) {
         Product product = productMapper.productDTOToProduct(productDTO);
         product.setAmountInStock(product.getAmountInStock() - 1);
-        if (product.getAmountInStock() == 0){
+        if (product.getAmountInStock() == 0) {
             product.setActive(false);
         }
         if (file == null) {
             product.setProductImage("default.jpg");
-        }
-        else {
-            String fileName = FileUploader.uploadFile(file);
+        } else {
+            String fileName = fileUploader.uploadFile(file);
             product.setProductImage(fileName);
         }
         productRepository.save(product);
@@ -70,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> deleteProduct(Long productId) {
-            productRepository.deleteById(productId);
+        productRepository.deleteById(productId);
         List<Product> productList = productRepository.findByIsActiveTrue();
         List<ProductDTO> productDTOList = new ArrayList<>();
         productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
@@ -85,8 +91,7 @@ public class ProductServiceImpl implements ProductService {
         return productDTOList;
     }
 
-    @Override
-    public Set<String> getBrandNames(List<ProductDTO> products) {
+    private Set<String> getBrandNames(List<ProductDTO> products) {
         Set<String> brandNames = new TreeSet<>();
         for (ProductDTO product : products) {
             brandNames.add(product.getProductBrand());
@@ -128,17 +133,15 @@ public class ProductServiceImpl implements ProductService {
         List<String> categoriesToFilter = filterParametersDTO.getCategoriesToFilter();
         List<String> brandsToFilter = filterParametersDTO.getBrandsToFilter();
         List<Product> productList;
-        if (categoriesToFilter.isEmpty()&& brandsToFilter.isEmpty()){
+        if (categoriesToFilter.isEmpty() && brandsToFilter.isEmpty()) {
             return findAllProducts();
         }
         if (categoriesToFilter.isEmpty()) {
             productList = productRepository.findByBrands(brandsToFilter);
-        }
-       else if (brandsToFilter.isEmpty()){
+        } else if (brandsToFilter.isEmpty()) {
             productList = productRepository.findByCategories(categoriesToFilter);
-        }
-       else {
-           productList = productRepository.findByBrandsAndCategories(brandsToFilter, categoriesToFilter);
+        } else {
+            productList = productRepository.findByBrandsAndCategories(brandsToFilter, categoriesToFilter);
         }
         List<ProductDTO> productDTOList = new ArrayList<>();
         productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));

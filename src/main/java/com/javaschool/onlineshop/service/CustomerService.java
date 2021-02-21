@@ -1,12 +1,11 @@
 package com.javaschool.onlineshop.service;
 
 import com.javaschool.onlineshop.model.dto.CustomerDTO;
-
-import java.util.Map;
+import com.javaschool.onlineshop.security.authData.JwtResponse;
 
 public interface CustomerService {
 
-    Map<String, Object> login(String email);
+    JwtResponse login(String email);
 
     CustomerDTO addCustomer(CustomerDTO customerDTO);
 
