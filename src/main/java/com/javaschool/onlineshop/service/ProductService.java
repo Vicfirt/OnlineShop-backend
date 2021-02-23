@@ -6,7 +6,6 @@ import com.javaschool.onlineshop.model.dto.ProductDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ProductService {
 
@@ -29,4 +28,6 @@ public interface ProductService {
     List<CategoryDTO> addNewCategory(CategoryDTO categoryDTO);
 
     List<ProductDTO> filterByParameters(FilterParametersDTO filterParametersDTO);
+
+    List<ProductDTO> findTop();
 }

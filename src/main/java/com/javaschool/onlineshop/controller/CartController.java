@@ -25,8 +25,9 @@ public class CartController {
 
     /**
      * This method gets a list of items in the cart according to the received list of id.
-     * @param productIdList             list with id of products in the cart
-     * @return                          response with list of products in cart
+     *
+     * @param productIdList list with id of products in the cart
+     * @return response with list of products in cart
      */
     @PostMapping("/cart")
     public ResponseEntity<List<ProductDTO>> getCart(@RequestBody List<Long> productIdList) {

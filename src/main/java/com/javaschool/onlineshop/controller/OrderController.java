@@ -3,6 +3,7 @@ package com.javaschool.onlineshop.controller;
 import com.javaschool.onlineshop.exception.FieldInputException;
 import com.javaschool.onlineshop.model.dto.OrderDTO;
 import com.javaschool.onlineshop.model.dto.OrderObjectDTO;
+import com.javaschool.onlineshop.model.dto.StatisticsDTO;
 import com.javaschool.onlineshop.security.CustomUserPrincipal;
 import com.javaschool.onlineshop.service.OrderService;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  * This class handles requests related to actions with orders.
@@ -33,7 +36,8 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderObjectDTO orderObjectDTO, BindingResult bindingResult) {
+    public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderObjectDTO orderObjectDTO, BindingResult bindingResult)
+            throws IOException, TimeoutException {
         if (bindingResult.hasErrors()) {
             throw new FieldInputException(bindingResult, "Validation error");
         } else {
@@ -62,7 +66,7 @@ public class OrderController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<List<Object>> getStat() {
+    public ResponseEntity<List<StatisticsDTO>> getStatistics() {
         return ResponseEntity.ok(orderService.findSalesSumInEachCategory());
     }
 }

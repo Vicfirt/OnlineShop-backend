@@ -2,12 +2,15 @@ package com.javaschool.onlineshop.service;
 
 import com.javaschool.onlineshop.model.dto.OrderDTO;
 import com.javaschool.onlineshop.model.dto.OrderObjectDTO;
+import com.javaschool.onlineshop.model.dto.StatisticsDTO;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public interface OrderService {
 
-    OrderDTO addOrder(OrderObjectDTO orderObjectDTO);
+    OrderDTO addOrder(OrderObjectDTO orderObjectDTO) throws IOException, TimeoutException;
 
     List<OrderDTO> findOrdersByEmail(String customerEmail);
 
@@ -19,5 +22,5 @@ public interface OrderService {
 
     List<OrderDTO> findAllOrders();
 
-    List<Object> findSalesSumInEachCategory();
+    List<StatisticsDTO> findSalesSumInEachCategory();
 }

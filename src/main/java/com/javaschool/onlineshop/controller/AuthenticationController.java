@@ -34,8 +34,9 @@ public class AuthenticationController {
 
     /**
      * This method is responsible for handling request to user authentication
-     * @param request           it contains information required for authentication
-     * @return                  contains email, password, token of authenticated user
+     *
+     * @param request it contains information required for authentication
+     * @return contains email, password, token of authenticated user
      */
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody AuthenticationRequest request) {

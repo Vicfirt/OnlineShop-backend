@@ -45,7 +45,7 @@ public class OrderObjectDTO {
 
     private String status;
 
-   private Map<Long, Long> productInformation;
+    private Map<Long, Long> productInformation;
 
     private LocalDate date;
 

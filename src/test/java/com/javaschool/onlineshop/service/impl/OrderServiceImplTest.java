@@ -2,6 +2,7 @@ package com.javaschool.onlineshop.service.impl;
 
 import com.javaschool.onlineshop.mappers.OrderMapper;
 import com.javaschool.onlineshop.model.dto.OrderDTO;
+import com.javaschool.onlineshop.model.dto.StatisticsDTO;
 import com.javaschool.onlineshop.model.entity.Order;
 import com.javaschool.onlineshop.repository.OrderElementRepository;
 import com.javaschool.onlineshop.repository.OrderRepository;
@@ -99,9 +100,9 @@ public class OrderServiceImplTest {
 
     @Test
     public void findSalesSumInEachCategory() {
-        List<Object> objects = new ArrayList<>();
+        List<StatisticsDTO> statisticsDTOList = new ArrayList<>();
         LocalDate date = LocalDate.now().minusMonths(1);
-        Mockito.when(orderRepository.findSalesSumInEachCategory(date)).thenReturn(objects);
+        Mockito.when(orderRepository.findSalesSumInEachCategory(date)).thenReturn(statisticsDTOList);
         orderService.findSalesSumInEachCategory();
         Mockito.verify(orderRepository, Mockito.times(1)).findSalesSumInEachCategory(date);
     }

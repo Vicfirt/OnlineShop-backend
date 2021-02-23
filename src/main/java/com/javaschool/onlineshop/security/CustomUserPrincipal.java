@@ -13,7 +13,7 @@ public class CustomUserPrincipal implements UserDetails {
 
     private final Customer customer;
 
-    public CustomUserPrincipal(Customer customer){
+    public CustomUserPrincipal(Customer customer) {
         this.customer = customer;
     }
 

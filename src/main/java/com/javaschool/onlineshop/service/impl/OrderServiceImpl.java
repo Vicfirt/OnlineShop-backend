@@ -3,6 +3,7 @@ package com.javaschool.onlineshop.service.impl;
 import com.javaschool.onlineshop.mappers.OrderMapper;
 import com.javaschool.onlineshop.model.dto.OrderDTO;
 import com.javaschool.onlineshop.model.dto.OrderObjectDTO;
+import com.javaschool.onlineshop.model.dto.StatisticsDTO;
 import com.javaschool.onlineshop.model.entity.Order;
 import com.javaschool.onlineshop.model.entity.OrderElement;
 import com.javaschool.onlineshop.model.entity.Product;
@@ -12,10 +13,12 @@ import com.javaschool.onlineshop.repository.ProductRepository;
 import com.javaschool.onlineshop.service.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,18 +31,26 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderElementRepository orderElementRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, OrderElementRepository orderElementRepository) {
+    private final MessageServiceImpl rabbitMessageService;
+
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, OrderElementRepository orderElementRepository, MessageServiceImpl rabbitMessageService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.productRepository = productRepository;
         this.orderElementRepository = orderElementRepository;
+        this.rabbitMessageService = rabbitMessageService;
     }
 
     @Override
-    public OrderDTO addOrder(OrderObjectDTO orderObjectDTO) {
+    public OrderDTO addOrder(OrderObjectDTO orderObjectDTO) throws IOException, TimeoutException {
         List<OrderElement> orderElementList = new ArrayList<>();
         for (Map.Entry<Long, Long> entry : orderObjectDTO.getProductInformation().entrySet()) {
             Product product = productRepository.findById(entry.getKey()).get();
+            product.setAmountInStock(product.getAmountInStock() - entry.getValue().intValue());
+            if (product.getAmountInStock() == 0) {
+                product.setActive(false);
+            }
+            productRepository.save(product);
             OrderElement orderElement = new OrderElement();
             orderElement.setProduct(product);
             orderElement.setQuantityInOrder(entry.getValue());
@@ -52,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderToOrderDTO(order);
     }
 
-    private Order createOrder(List<OrderElement> orderElementList, OrderObjectDTO orderObjectDTO) {
+    private Order createOrder(List<OrderElement> orderElementList, OrderObjectDTO orderObjectDTO) throws IOException, TimeoutException {
         Order order = new Order();
         order.getOrderElementList().addAll(orderElementList);
         order.setCustomerFirstName(orderObjectDTO.getCustomerFirstName());
@@ -68,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(orderObjectDTO.getStatus());
         order.setTotal(orderObjectDTO.getTotal());
         order.setPostcode(orderObjectDTO.getPostcode());
+        rabbitMessageService.sendMessage("Update");
         return order;
     }
 
@@ -110,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Object> findSalesSumInEachCategory() {
+    public List<StatisticsDTO> findSalesSumInEachCategory() {
         return orderRepository.findSalesSumInEachCategory(LocalDate.now().minusMonths(1));
     }
 }

@@ -3,7 +3,6 @@ package com.javaschool.onlineshop.controller;
 import com.javaschool.onlineshop.exception.EmailExistsException;
 import com.javaschool.onlineshop.exception.FieldInputException;
 import com.javaschool.onlineshop.model.dto.CustomerDTO;
-import com.javaschool.onlineshop.repository.OrderRepository;
 import com.javaschool.onlineshop.security.CustomUserPrincipal;
 import com.javaschool.onlineshop.service.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +32,10 @@ public class CustomerController {
 
     /**
      * This method processes the request for registration of a new user.
-     * @param customerDTO            customer to be registered
-     * @param bindingResult          used for form validation
-     * @return                       response informing about successful registration
+     *
+     * @param customerDTO   customer to be registered
+     * @param bindingResult used for form validation
+     * @return response informing about successful registration
      */
     @PostMapping("/signup")
     public ResponseEntity<String> toSignUp(@Valid @RequestBody CustomerDTO customerDTO,
@@ -53,8 +53,9 @@ public class CustomerController {
 
     /**
      * This method processes a request for information about a previously registered customer.
-     * @param customer              customer to be authenticated
-     * @return                      response with information about authenticated customer
+     *
+     * @param customer customer to be authenticated
+     * @return response with information about authenticated customer
      */
     @GetMapping("/customer")
     public ResponseEntity<CustomerDTO> getCustomer(@AuthenticationPrincipal CustomUserPrincipal customer) {
@@ -63,9 +64,10 @@ public class CustomerController {
 
     /**
      * This method processes a request to update customer information.
-     * @param customer              customer to be authenticated
-     * @param updatedCustomer       it contains data necessary for updating customer
-     * @param bindingResult         used for form validation
+     *
+     * @param customer        customer to be authenticated
+     * @param updatedCustomer it contains data necessary for updating customer
+     * @param bindingResult   used for form validation
      * @return
      */
     @PutMapping("/customer")

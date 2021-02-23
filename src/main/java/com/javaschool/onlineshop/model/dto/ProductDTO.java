@@ -26,13 +26,13 @@ public class ProductDTO {
     @NotBlank(message = "Field should not be empty!")
     private String productBrand;
 
-    @Size( max = 30, message = "Model name must contain 2 to 30 characters.")
+    @Size(max = 30, message = "Model name must contain 2 to 30 characters.")
     @NotBlank(message = "Field should not be empty!")
     private String productModel;
 
     @NotNull(message = "Field should not be empty!")
     @Min(value = 1, message = "Weight cannot be less than 1")
-    @Max(value = 100000, message = "Weight should not exceed 1000000" )
+    @Max(value = 100000, message = "Weight should not exceed 1000000")
     private Integer productWeight;
 
     @NotNull(message = "Field should not be empty!")
@@ -45,7 +45,7 @@ public class ProductDTO {
     @Max(value = 10000, message = "Amount in stock should not exceed 1000000")
     private Integer amountInStock;
 
-    @Size( max = 255, message = "The number of characters in the description cannot be more than 255")
+    @Size(max = 255, message = "The number of characters in the description cannot be more than 255")
     @NotBlank(message = "Field should not be empty!")
     private String productDescription;
 

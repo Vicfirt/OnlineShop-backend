@@ -22,6 +22,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtRequestFilter jwtRequestFilter;
 
+    private static final String[] ADMIN_PERMISSIONS = {
+            "/statistics",
+            "/order/status",
+            "/product/all",
+            "/orders/all",
+            "/product/edition",
+            "/product/deletion",
+            "/product/new",
+            "product/category"
+    };
+
+    private static final String[] ALL_PERMISSIONS = {
+            "/cart",
+            "/product/active",
+            "/signup",
+            "/order",
+            "/product/categories",
+            "/product/{productId}",
+            "/media/**",
+            "/authentication/login"
+    };
+
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
@@ -49,19 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().cors().and()
-                .authorizeRequests().antMatchers("/cart", "/product/active").permitAll()
-                .antMatchers("/signup").permitAll()
-                .antMatchers("/statistics").hasAnyAuthority("ADMIN")
-                .antMatchers("/order").permitAll()
-                .antMatchers("/advertisement").permitAll()
+                .authorizeRequests()
+                .antMatchers(ALL_PERMISSIONS).permitAll()
+                .antMatchers(ADMIN_PERMISSIONS).hasAnyAuthority("ADMIN")//
                 .antMatchers("/order/info").hasAnyAuthority("CUSTOMER", "ADMIN")
-                .antMatchers("/order/status").hasAnyAuthority("ADMIN")
-                .antMatchers("/product/all", "/orders/all").hasAnyAuthority("ADMIN")
-                .antMatchers("/product/deletion", "/product/edition").hasAnyAuthority("ADMIN")
-                .antMatchers("/product/{productId}", "/product/categories").permitAll()
-                .antMatchers("/product/new", "product/category").hasAnyAuthority("ADMIN")
-                .antMatchers("/media/**").permitAll()
-                .antMatchers("/authentication/login").permitAll().anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

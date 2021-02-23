@@ -11,6 +11,7 @@ import com.javaschool.onlineshop.repository.CategoryRepository;
 import com.javaschool.onlineshop.repository.ProductRepository;
 import com.javaschool.onlineshop.service.ProductService;
 import com.javaschool.onlineshop.utils.FileUploader;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,10 +62,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProduct(ProductDTO productDTO, MultipartFile file) {
         Product product = productMapper.productDTOToProduct(productDTO);
-        product.setAmountInStock(product.getAmountInStock() - 1);
-        if (product.getAmountInStock() == 0) {
-            product.setActive(false);
-        }
         if (file == null) {
             product.setProductImage("default.jpg");
         } else {
@@ -143,6 +140,14 @@ public class ProductServiceImpl implements ProductService {
         } else {
             productList = productRepository.findByBrandsAndCategories(brandsToFilter, categoriesToFilter);
         }
+        List<ProductDTO> productDTOList = new ArrayList<>();
+        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
+        return productDTOList;
+    }
+
+    @Override
+    public List<ProductDTO> findTop() {
+        List<Product> productList = productRepository.findTop(PageRequest.of(0, 5));
         List<ProductDTO> productDTOList = new ArrayList<>();
         productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
         return productDTOList;

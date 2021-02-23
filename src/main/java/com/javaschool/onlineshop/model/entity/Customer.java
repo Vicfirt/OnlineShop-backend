@@ -43,7 +43,7 @@ public class Customer {
     @Column(name = "customer_phoneNumber")
     private String phoneNumber;
 
-    @Column(name="country")
+    @Column(name = "country")
     private String country;
 
     @Column(name = "city")

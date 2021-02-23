@@ -103,4 +103,9 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> findAllActiveProducts() {
         return ResponseEntity.ok(productService.findAllActiveProducts());
     }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<ProductDTO>> getTop() {
+        return ResponseEntity.ok(productService.findTop());
+    }
 }
