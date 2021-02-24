@@ -6,5 +6,6 @@
 * Rabbit MQ
 * Javascript, ReactJS, Bootstrap
 
-[## Technical solution description document] (https://docs.google.com/document/d/1Ju2wRFIyx3V42CNMQKIQZXarrhkzwbu4haD2mY8EJvg/edit?usp=sharing)
+## Technical solution description document 
+[TSD document](https://docs.google.com/document/d/1Ju2wRFIyx3V42CNMQKIQZXarrhkzwbu4haD2mY8EJvg/edit?usp=sharing)
 
