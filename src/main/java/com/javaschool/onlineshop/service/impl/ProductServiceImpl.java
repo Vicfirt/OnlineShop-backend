@@ -19,7 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for processing data received from product repository as well as preparing it for
+ *  sending to the Client Application.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -45,20 +50,32 @@ public class ProductServiceImpl implements ProductService {
         this.fileUploader = fileUploader;
     }
 
+    /**
+     * This method is responsible for getting list of all products.
+     * @return converted product list
+     */
     @Override
     public List<ProductDTO> findAllProducts() {
-        List<Product> productList = productRepository.findAll();
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
-        return productDTOList;
+        return productRepository.findAll().stream().map(productMapper::productToProductDTO)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for getting product by specified id.
+     * @param productId             specifies product to be fetched
+     * @return converted product
+     */
     @Override
     public ProductDTO getProductById(Long productId) {
         Product product = productRepository.getOne(productId);
         return productMapper.productToProductDTO(product);
     }
 
+    /**
+     * This method is responsible for adding new product to catalog.
+     * @param productDTO            product to be added
+     * @param file                  image to be attached to the product
+     */
     @Override
     public void addProduct(ProductDTO productDTO, MultipartFile file) {
         Product product = productMapper.productDTOToProduct(productDTO);
@@ -71,23 +88,33 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    /**
+     * This method is responsible for deleting product by specified id.
+     * @param productId             specifies product to be deleted
+     * @return                      converted product list
+     */
     @Override
     public List<ProductDTO> deleteProduct(Long productId) {
         productRepository.deleteById(productId);
-        List<Product> productList = productRepository.findByIsActiveTrue();
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
-        return productDTOList;
+        return productRepository.findByIsActiveTrue().stream().map(productMapper::productToProductDTO)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for getting list of all active products.
+     * @return converted list of active products
+     */
     @Override
     public List<ProductDTO> findAllActiveProducts() {
-        List<Product> productList = productRepository.findByIsActiveTrue();
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
-        return productDTOList;
+       return productRepository.findByIsActiveTrue().stream().map(productMapper::productToProductDTO)
+               .collect(Collectors.toList());
     }
 
+    /**
+     * This method is used to return sorted set of brand names.
+     * @param products              products whose brand names will be used
+     * @return                      names of the product brands
+     */
     private Set<String> getBrandNames(List<ProductDTO> products) {
         Set<String> brandNames = new TreeSet<>();
         for (ProductDTO product : products) {
@@ -96,28 +123,42 @@ public class ProductServiceImpl implements ProductService {
         return brandNames;
     }
 
+    /**
+     * This method returns all available brand names.
+     * @return brand names of available products
+     */
     @Override
     public List<String> getAllAvailableBrands() {
         List<ProductDTO> productDTOList = findAllActiveProducts();
         return new ArrayList<>(getBrandNames(productDTOList));
     }
 
+    /**
+     * This method is responsible for fetching products with specified id.
+     * @param productIdList                 list of id specifies the products to be fetched
+     * @return  converted product list
+     */
     @Override
     public List<ProductDTO> getProductsInCart(List<Long> productIdList) {
-        List<Product> productList = productRepository.findByProductIdIn(productIdList);
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
-        return productDTOList;
+        return productRepository.findByProductIdIn(productIdList).stream().map(productMapper::productToProductDTO)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * This method returns all categories;
+     * @return converted categories list
+     */
     @Override
     public List<CategoryDTO> getAllCategories() {
-        List<Category> categoryList = categoryRepository.findAll();
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        categoryList.forEach(category -> categoryDTOList.add(categoryMapper.categoryToCategoryDTO(category)));
-        return categoryDTOList;
+       return categoryRepository.findAll().stream().map(categoryMapper::categoryToCategoryDTO)
+               .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for adding new category to the shop.
+     * @param categoryDTO           category to be saved
+     * @return                      converted categories list
+     */
     @Override
     public List<CategoryDTO> addNewCategory(CategoryDTO categoryDTO) {
         Category category = categoryMapper.categoryDTOToCategory(categoryDTO);
@@ -125,6 +166,11 @@ public class ProductServiceImpl implements ProductService {
         return getAllCategories();
     }
 
+    /**
+     * This method gets a list of products that match the request filter parameters
+     * @param filterParametersDTO               it contains parameters to filter by
+     * @return converted product list
+     */
     @Override
     public List<ProductDTO> filterByParameters(FilterParametersDTO filterParametersDTO) {
         List<String> categoriesToFilter = filterParametersDTO.getCategoriesToFilter();
@@ -145,11 +191,13 @@ public class ProductServiceImpl implements ProductService {
         return productDTOList;
     }
 
+    /**
+     * This method responsible for getting top five most selling products.
+     * @return converted product list
+     */
     @Override
     public List<ProductDTO> findTop() {
-        List<Product> productList = productRepository.findTop(PageRequest.of(0, 5));
-        List<ProductDTO> productDTOList = new ArrayList<>();
-        productList.forEach(product -> productDTOList.add(productMapper.productToProductDTO(product)));
-        return productDTOList;
+       return productRepository.findTop(PageRequest.of(0, 5)).stream()
+               .map(productMapper::productToProductDTO).collect(Collectors.toList());
     }
 }

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * This class is responsible for message sending process to the queue.
+ */
 @Service
 public class MessageServiceImpl implements MessageService {
 

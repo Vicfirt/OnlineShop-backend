@@ -35,6 +35,14 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    /**
+     * This method processes a request to add new order.
+     * @param orderObjectDTO                order to be saved
+     * @param bindingResult                 used for form validation
+     * @return saved order
+     * @throws IOException                  it appears when queue name length equals to 0
+     * @throws TimeoutException             it appears when message send timeout has expired
+     */
     @PostMapping("/order")
     public ResponseEntity<OrderDTO> addOrder(@Valid @RequestBody OrderObjectDTO orderObjectDTO, BindingResult bindingResult)
             throws IOException, TimeoutException {
@@ -45,26 +53,50 @@ public class OrderController {
         }
     }
 
+    /**
+     * This method processes a request to get all orders of an authorized customer.
+     * @param customer                  customers principal
+     * @return all customer orders
+     */
     @GetMapping("/orders")
     public ResponseEntity<List<OrderDTO>> getAllCustomerOrders(@AuthenticationPrincipal CustomUserPrincipal customer) {
         return ResponseEntity.ok(orderService.findOrdersByEmail(customer.getUsername()));
     }
 
+    /**
+     * This method processes a request to get particular order by id.
+     * @param orderId                     specifies order to be fetched
+     * @return  order with specified id
+     */
     @GetMapping("/order/info/{orderId}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.findOrderById(orderId));
     }
 
+    /**
+     * This method processes a request to change status of an order with specified id.
+     * @param orderId                   specifies order to be changed
+     * @param orderStatus               status to be set
+     * @return                          all orders
+     */
     @PatchMapping("/order/status/{orderId}")
     public ResponseEntity<List<OrderDTO>> updateOrder(@PathVariable Long orderId, @RequestBody String orderStatus) {
         return ResponseEntity.ok(orderService.updateOrder(orderId, orderStatus));
     }
 
+    /**
+     * This method processes a request to get all orders.
+     * @return  all orders
+     */
     @GetMapping("/orders/all")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(orderService.findAllOrders());
     }
 
+    /**
+     * This method processes a request to get sales statistics by categories.
+     * @return queried data
+     */
     @GetMapping("/statistics")
     public ResponseEntity<List<StatisticsDTO>> getStatistics() {
         return ResponseEntity.ok(orderService.findSalesSumInEachCategory());

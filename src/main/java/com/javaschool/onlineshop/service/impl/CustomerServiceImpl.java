@@ -11,6 +11,10 @@ import com.javaschool.onlineshop.service.CustomerService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class is responsible for processing data received from customer repository as well as preparing it for
+ * sending to the Client Application.
+ */
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -30,6 +34,11 @@ public class CustomerServiceImpl implements CustomerService {
         this.jwtProvider = jwtProvider;
     }
 
+    /**
+     * This method is responsible for customer authentication with jwt token.
+     * @param email                 email to be authenticated
+     * @return response to authenticated customer
+     */
     public JwtResponse login(String email) {
         Customer customer = customerRepository.findCustomerByCustomerEmailAddress(email);
         String role = customer.getRole();
@@ -41,6 +50,11 @@ public class CustomerServiceImpl implements CustomerService {
         return jwtResponse;
     }
 
+    /**
+     * This method is responsible for add customer operation.
+     * @param customerDTO           customer to be saved
+     * @return saved customer
+     */
     @Override
     public CustomerDTO addCustomer(CustomerDTO customerDTO) {
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
@@ -49,11 +63,21 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDTO;
     }
 
+    /**
+     *  This method provides the customer with given username
+     * @param username             specifies the customer
+     * @return customer with requested username
+     */
     @Override
     public CustomerDTO getByUsername(String username) {
         return customerMapper.customerToCustomerDTO(customerRepository.findCustomerByCustomerEmailAddress(username));
     }
 
+    /**
+     * This method is responsible for editing the customer.
+     * @param customerName      specifies customer to be edited
+     * @param customerDTO       it contains data to update customer
+     */
     @Override
     public void updateCustomer(String customerName, CustomerDTO customerDTO) {
         Customer customer = customerRepository.findCustomerByCustomerEmailAddress(customerName);

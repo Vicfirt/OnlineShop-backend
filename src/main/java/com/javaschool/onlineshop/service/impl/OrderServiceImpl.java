@@ -19,7 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for processing data received from order repository as well as preparing it for
+ *  * sending to the Client Application.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -31,16 +36,23 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderElementRepository orderElementRepository;
 
-    private final MessageServiceImpl rabbitMessageService;
+    private final MessageServiceImpl messageService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, OrderElementRepository orderElementRepository, MessageServiceImpl rabbitMessageService) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, ProductRepository productRepository, OrderElementRepository orderElementRepository, MessageServiceImpl messageService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.productRepository = productRepository;
         this.orderElementRepository = orderElementRepository;
-        this.rabbitMessageService = rabbitMessageService;
+        this.messageService = messageService;
     }
 
+    /**
+     * This method is responsible for add new order operation.
+     * @param orderObjectDTO         it contains data to create new order
+     * @return just saved orders
+     * @throws IOException           it appears when queue name length equals to 0
+     * @throws TimeoutException      it appears when message send timeout has expired
+     */
     @Override
     public OrderDTO addOrder(OrderObjectDTO orderObjectDTO) throws IOException, TimeoutException {
         List<OrderElement> orderElementList = new ArrayList<>();
@@ -63,6 +75,14 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderToOrderDTO(order);
     }
 
+    /**
+     * This method creates new order based on given parameters.
+     * @param orderElementList          order items to be added to order
+     * @param orderObjectDTO            it contains address and customer information
+     * @return created order
+     * @throws IOException              it appears when queue name length equals to 0
+     * @throws TimeoutException         it appears when message send timeout has expired
+     */
     private Order createOrder(List<OrderElement> orderElementList, OrderObjectDTO orderObjectDTO) throws IOException, TimeoutException {
         Order order = new Order();
         order.getOrderElementList().addAll(orderElementList);
@@ -79,48 +99,70 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(orderObjectDTO.getStatus());
         order.setTotal(orderObjectDTO.getTotal());
         order.setPostcode(orderObjectDTO.getPostcode());
-        rabbitMessageService.sendMessage("Update");
+        messageService.sendMessage("Update");
         return order;
     }
 
+    /**
+     * This method is responsible for getting list of all orders.
+     * @return converted orders list
+     */
     @Override
     public List<OrderDTO> findAllOrders() {
-        List<Order> orderList = orderRepository.findAll();
-        List<OrderDTO> orderDTOList = new ArrayList<>();
-        orderList.forEach(order -> orderDTOList.add(orderMapper.orderToOrderDTO(order)));
-        return orderDTOList;
+        return orderRepository.findAll().stream().map(orderMapper::orderToOrderDTO)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for getting orders list of a particular customer.
+     * @param customerEmail             it specifies customer
+     * @return converted customer orders list
+     */
     @Override
     public List<OrderDTO> findOrdersByEmail(String customerEmail) {
-        List<Order> orderList = orderRepository.findOrdersByCustomerEmailAddress(customerEmail);
-        List<OrderDTO> orderDTOList = new ArrayList<>();
-        orderList.forEach(order -> orderDTOList.add(orderMapper.orderToOrderDTO(order)));
-        return orderDTOList;
+        return orderRepository.findOrdersByCustomerEmailAddress(customerEmail).stream().map(orderMapper::orderToOrderDTO)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for getting order by specified id.
+     * @param orderId                   specifies the order to be fetched
+     * @return  converted order
+     */
     @Override
     public OrderDTO findOrderById(Long orderId) {
         Order order = orderRepository.getOne(orderId);
         return orderMapper.orderToOrderDTO(order);
     }
 
+    /**
+     * This method is responsible for deleting order by specified id.
+     * @param orderId                   specifies the order to be deleted
+     */
     @Override
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
     }
 
+    /**
+     * This method is responsible for updating order with represented status.
+     * @param orderId                   specifies the order to be updated
+     * @param orderStatus               status to update order with
+     * @return converted orders list
+     */
     @Override
     public List<OrderDTO> updateOrder(Long orderId, String orderStatus) {
         Order order = orderRepository.getOne(orderId);
         order.setStatus(orderStatus);
         orderRepository.save(order);
-        List<Order> orderList = orderRepository.findAll();
-        List<OrderDTO> orderDTOList = new ArrayList<>();
-        orderList.forEach(orderInList -> orderDTOList.add(orderMapper.orderToOrderDTO(orderInList)));
-        return orderDTOList;
+       return orderRepository.findAll().stream().map(orderMapper::orderToOrderDTO)
+               .collect(Collectors.toList());
     }
 
+    /**
+     * This method is responsible for getting sales statistics by categories.
+     * @return  queried data
+     */
     @Override
     public List<StatisticsDTO> findSalesSumInEachCategory() {
         return orderRepository.findSalesSumInEachCategory(LocalDate.now().minusMonths(1));
