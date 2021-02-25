@@ -3,9 +3,7 @@ package com.javaschool.onlineshop.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.Jws;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +13,8 @@ import java.util.function.Function;
 @Component
 public class JwtProvider {
 
-    private String secretKey = "sectet";
+    @Value("${secret.key}")
+    private String secretKey;
 
     public String createToken(String username, String role) {
         Claims claims = Jwts.claims().setSubject(username);
@@ -54,5 +53,4 @@ public class JwtProvider {
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-
 }

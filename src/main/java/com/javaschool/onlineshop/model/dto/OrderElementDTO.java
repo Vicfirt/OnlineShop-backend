@@ -9,6 +9,8 @@ public class OrderElementDTO {
 
     private Long quantityInOrder;
 
+    private Double elementPrice;
+
     public Long getOrderItemId() {
         return orderItemId;
     }
@@ -31,5 +33,13 @@ public class OrderElementDTO {
 
     public void setQuantityInOrder(Long quantityInOrder) {
         this.quantityInOrder = quantityInOrder;
+    }
+
+    public Double getElementPrice() {
+        return elementPrice;
+    }
+
+    public void setElementPrice(Double elementPrice) {
+        this.elementPrice = elementPrice;
     }
 }

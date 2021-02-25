@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product")
@@ -25,8 +24,8 @@ public class Product {
     @Column(name = "price")
     private Double productPrice;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
+    @Column(name = "category")
+    private String category;
 
     @Column(name = "brand")
     private String productBrand;
@@ -41,7 +40,6 @@ public class Product {
     private Integer productCapacity;
 
     @Column(name = "amount_in_stock")
-    @NotNull
     private Integer amountInStock;
 
     @Column(name = "description")
@@ -78,12 +76,13 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getProductBrand() {

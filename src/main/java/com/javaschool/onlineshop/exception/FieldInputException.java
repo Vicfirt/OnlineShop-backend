@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class FieldInputError extends RuntimeException {
+public class FieldInputException extends RuntimeException {
 
     private final BindingResult bindingResult;
 
     private final Map<String, String> errorsMap;
 
-    public FieldInputError(BindingResult bindingResult, String message) {
+    public FieldInputException(BindingResult bindingResult, String message) {
         super(message);
         this.bindingResult = bindingResult;
         this.errorsMap = bindingResult.getFieldErrors().stream().collect(collector);
